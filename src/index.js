@@ -90,8 +90,7 @@ function GeoJsonBufferGeometry(geoJson, radius) {
   }
 
   function genLineString(coords, r) {
-    const coords3d = coords
-      .map(lineCoords => interpolateLine(lineCoords))
+    const coords3d = interpolateLine(coords)
       .map(([lng, lat]) => polar2Cartesian(lat, lng, r));
 
     const { vertices } = earcut.flatten([coords3d]);
@@ -119,8 +118,7 @@ function GeoJsonBufferGeometry(geoJson, radius) {
 
   function genPolygon(coords, r) {
     const coords3d = coords
-      .map(coordsSegment => coordsSegment
-        .map(lineCoords => interpolateLine(lineCoords))
+      .map(coordsSegment => interpolateLine(coordsSegment)
         .map(([lng, lat]) => polar2Cartesian(lat, lng, r)));
 
     // Each point generates 3 vertice items (x,y,z).
