@@ -14,6 +14,8 @@ const THREE = window.THREE
 
 import earcut from 'earcut';
 
+import interpolateLine from './interpolateLine';
+
 function GeoJsonGeometry(geoJson, radius) {
   Geometry.call(this);
 
@@ -88,7 +90,9 @@ function GeoJsonBufferGeometry(geoJson, radius) {
   }
 
   function genLineString(coords, r) {
-    const coords3d = coords.map(([lng, lat]) => polar2Cartesian(lat, lng, r));
+    const coords3d = coords
+      .map(lineCoords => interpolateLine(lineCoords))
+      .map(([lng, lat]) => polar2Cartesian(lat, lng, r));
 
     const { vertices } = earcut.flatten([coords3d]);
 
@@ -114,7 +118,10 @@ function GeoJsonBufferGeometry(geoJson, radius) {
   }
 
   function genPolygon(coords, r) {
-    const coords3d = coords.map(coordsSegment => coordsSegment.map(([lng, lat]) => polar2Cartesian(lat, lng, r)));
+    const coords3d = coords
+      .map(coordsSegment => coordsSegment
+        .map(lineCoords => interpolateLine(lineCoords))
+        .map(([lng, lat]) => polar2Cartesian(lat, lng, r)));
 
     // Each point generates 3 vertice items (x,y,z).
     const { vertices, holes } = earcut.flatten(coords3d);
