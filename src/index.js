@@ -16,35 +16,38 @@ import earcut from 'earcut';
 
 import interpolateLine from './interpolateLine';
 
-function GeoJsonGeometry(geoJson, radius) {
+function GeoJsonGeometry(geoJson, radius, resolution) {
   Geometry.call(this);
 
   this.type = 'GeoJsonGeometry';
 
   this.parameters = {
     geoJson,
-    radius
+    radius,
+    resolution
   };
 
-  this.fromBufferGeometry(new GeoJsonBufferGeometry(geoJson, radius));
+  this.fromBufferGeometry(new GeoJsonBufferGeometry(geoJson, radius, resolution));
   this.mergeVertices();
 }
 
 GeoJsonGeometry.prototype = Object.create(Geometry.prototype);
 GeoJsonGeometry.prototype.constructor = GeoJsonGeometry;
 
-function GeoJsonBufferGeometry(geoJson, radius) {
+function GeoJsonBufferGeometry(geoJson, radius, resolution) {
   BufferGeometry.call(this);
 
   this.type = 'GeoJsonBufferGeometry';
 
   this.parameters = {
     geoJson,
-    radius
+    radius,
+    resolution
   };
 
   // defaults
   radius = radius || 1;
+  resolution = resolution || 5;
 
   // process various geometry types
   const groups = ({
@@ -90,7 +93,7 @@ function GeoJsonBufferGeometry(geoJson, radius) {
   }
 
   function genLineString(coords, r) {
-    const coords3d = interpolateLine(coords)
+    const coords3d = interpolateLine(coords, resolution)
       .map(([lng, lat]) => polar2Cartesian(lat, lng, r));
 
     const { vertices } = earcut.flatten([coords3d]);
@@ -118,7 +121,7 @@ function GeoJsonBufferGeometry(geoJson, radius) {
 
   function genPolygon(coords, r) {
     const coords3d = coords
-      .map(coordsSegment => interpolateLine(coordsSegment)
+      .map(coordsSegment => interpolateLine(coordsSegment, resolution)
         .map(([lng, lat]) => polar2Cartesian(lat, lng, r)));
 
     // Each point generates 3 vertice items (x,y,z).

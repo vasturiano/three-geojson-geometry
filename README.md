@@ -43,6 +43,7 @@ const myLine = new THREE.Line(
 
 * <b>geoJson</b>: A GeoJson `geometry` object. It's recommended to split the geometries at the [anti-meridian](https://en.wikipedia.org/wiki/180th_meridian).
 * <b>radius</b>: Radius of the sphere surface to draw the poygon on. Default is `1`.
+* <b>resolution</b>: Resolution of the sphere, in lat/lng degrees. If the distance between two adjacent line points is larger than this value, the line segment will be interpolated in order to approximate the curvature of the sphere surface. Lower values yield more perfectly curved lines, at the cost of performance. Default is `5`.
 
 ### Properties
 
