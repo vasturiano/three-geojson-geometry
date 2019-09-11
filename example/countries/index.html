@@ -1,6 +1,8 @@
 <head>
   <style> body { margin: 0; } </style>
 
+  <script src="//unpkg.com/d3"></script>
+
   <script src="//unpkg.com/three"></script>
   <script src="//unpkg.com/three-trackballcontrols-web/dist/three-trackballcontrols.min.js"></script>
   <script src="//unpkg.com/three-geojson-geometry"></script>
@@ -14,15 +16,22 @@
   fetch('../geojson/ne_110m_admin_0_countries.geojson').then(res => res.json()).then(countries =>
   {
     const alt = 50;
+
+    const lineObjs = [
+      new THREE.LineSegments(
+        new THREE.GeoJsonBufferGeometry(d3.geoGraticule10(), alt),
+        new THREE.LineBasicMaterial({ color: 'white', opacity: 0.035, transparent: true })
+      )
+    ];
+
     const materials = [
       new THREE.LineBasicMaterial({ color: 'blue' }), // outer ring
       new THREE.LineBasicMaterial({ color: 'green' }) // inner holes
     ];
 
-    const lineObjs = [];
     countries.features.forEach(({ properties, geometry }) => {
       lineObjs.push(new THREE.LineSegments(
-        new THREE.GeoJsonBufferGeometry(geometry, alt),
+        new THREE.GeoJsonBufferGeometry(geometry, alt, 5),
         materials
       ))
     });
