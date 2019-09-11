@@ -1,6 +1,6 @@
 {
   "name": "three-geojson-geometry",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "ThreeJS geometry for stroking GeoJSON objects on a sphere",
   "unpkg": "dist/three-geojson-geometry.min.js",
   "main": "dist/three-geojson-geometry.common.js",
