@@ -178,8 +178,12 @@ GeoJsonBufferGeometry.prototype.constructor = GeoJsonBufferGeometry;
 
 function concatGroup(main, extra) {
   const prevVertCnt = Math.round(main.vertices.length / 3);
-  main.vertices.push(...extra.vertices);
-  main.indices.push(...extra.indices.map(ind => ind + prevVertCnt));
+  concatArr(main.vertices, extra.vertices);
+  concatArr(main.indices, extra.indices.map(ind => ind + prevVertCnt));
+}
+
+function concatArr(target, src) {
+  for (let e of src) target.push(e);
 }
 
 function polar2Cartesian(lat, lng, r = 0) {
