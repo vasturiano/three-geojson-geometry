@@ -16,8 +16,8 @@ import earcut from 'earcut';
 
 import interpolateLine from './interpolateLine';
 
-function GeoJsonGeometry(geoJson, radius, resolution) {
-  Geometry.call(this);
+function GeoJsonGeometry(geoJson, radius = 1, resolution = 5) {
+  THREE.BufferGeometry.call(this);
 
   this.type = 'GeoJsonGeometry';
 
@@ -26,28 +26,6 @@ function GeoJsonGeometry(geoJson, radius, resolution) {
     radius,
     resolution
   };
-
-  this.fromBufferGeometry(new GeoJsonBufferGeometry(geoJson, radius, resolution));
-  this.mergeVertices();
-}
-
-GeoJsonGeometry.prototype = Object.create(Geometry.prototype);
-GeoJsonGeometry.prototype.constructor = GeoJsonGeometry;
-
-function GeoJsonBufferGeometry(geoJson, radius, resolution) {
-  BufferGeometry.call(this);
-
-  this.type = 'GeoJsonBufferGeometry';
-
-  this.parameters = {
-    geoJson,
-    radius,
-    resolution
-  };
-
-  // defaults
-  radius = radius || 1;
-  resolution = resolution || 5;
 
   // process various geometry types
   const groups = ({
@@ -71,7 +49,7 @@ function GeoJsonBufferGeometry(geoJson, radius, resolution) {
 
   // build geometry
   indices.length && this.setIndex(indices);
-  vertices.length && this.addAttribute('position', new Float32BufferAttribute(vertices, 3));
+  vertices.length && this.addAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 
   //
 
@@ -171,8 +149,8 @@ function GeoJsonBufferGeometry(geoJson, radius, resolution) {
   }
 }
 
-GeoJsonBufferGeometry.prototype = Object.create(BufferGeometry.prototype);
-GeoJsonBufferGeometry.prototype.constructor = GeoJsonBufferGeometry;
+GeoJsonGeometry.prototype = Object.create(THREE.BufferGeometry.prototype);
+GeoJsonGeometry.prototype.constructor = GeoJsonGeometry;
 
 //
 
@@ -196,4 +174,4 @@ function polar2Cartesian(lat, lng, r = 0) {
   ];
 }
 
-export { GeoJsonGeometry, GeoJsonBufferGeometry };
+export { GeoJsonGeometry };

@@ -17,7 +17,7 @@
   const material = new THREE.LineBasicMaterial({ color: 'blue' });
 
   const graticuleObj = new THREE.LineSegments(
-    new THREE.GeoJsonBufferGeometry(d3.geoGraticule10(), alt),
+    new THREE.GeoJsonGeometry(d3.geoGraticule10(), alt),
     material
   );
 

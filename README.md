@@ -7,8 +7,6 @@ ThreeJS GeoJSON Geometry
 
 A ThreeJS geometry class for stroking GeoJSON objects on a sphere. 
 
-Both `GeoJsonGeometry` and `GeoJsonBufferGeometry` are provided.
-
 <p align="center">
   <a href="//vasturiano.github.io/three-geojson-geometry/example/countries/"><img width="80%" src="https://vasturiano.github.io/three-geojson-geometry/example/countries/preview.png"></a>
 </p>
