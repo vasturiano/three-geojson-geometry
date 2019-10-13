@@ -37,7 +37,7 @@ const myLine = new THREE.Line(
 
 ### Constructor
 
-<b>GeoJsonGeometry</b>(<b>geoJson</b>: <i>GeoJson object</i>, <b>radius</b>: <i>Float</i>)
+<b>GeoJsonGeometry</b>(<b>geoJson</b>: <i>GeoJson object</i>, <b>radius</b>: <i>Float</i>, <b>resolution</b>: <i>Float</i>)
 
 * <b>geoJson</b>: A GeoJson `geometry` object. It's recommended to split the geometries at the [anti-meridian](https://en.wikipedia.org/wiki/180th_meridian).
 * <b>radius</b>: Radius of the sphere surface to draw the poygon on. Default is `1`.
