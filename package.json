@@ -40,21 +40,21 @@
     "prepare": "npm run build && npm run minify && npm run build-module"
   },
   "dependencies": {
-    "earcut": "^2.1.5"
+    "earcut": "^2.2.1"
   },
   "peerDependencies": {
     "three": "*"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.0",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-    "@babel/preset-env": "^7.6.0",
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
+    "@babel/preset-env": "^7.7.1",
     "rimraf": "^3.0.0",
-    "rollup": "^1.21.2",
+    "rollup": "^1.26.3",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "terser": "^4.3.1"
+    "terser": "^4.3.9"
   }
 }
