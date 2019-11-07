@@ -49,7 +49,7 @@ function GeoJsonGeometry(geoJson, radius = 1, resolution = 5) {
 
   // build geometry
   indices.length && this.setIndex(indices);
-  vertices.length && this.addAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+  vertices.length && this.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 
   //
 
