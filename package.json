@@ -43,7 +43,7 @@
     "earcut": "^2.2.1"
   },
   "peerDependencies": {
-    "three": "*"
+    "three": ">=0.110.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
