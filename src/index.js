@@ -16,6 +16,9 @@ import earcut from 'earcut';
 
 import interpolateLine from './interpolateLine';
 
+// support both modes for backwards threejs compatibility
+const setAttributeFn = new THREE.BufferGeometry().setAttribute ? 'setAttribute' : 'addAttribute';
+
 function GeoJsonGeometry(geoJson, radius = 1, resolution = 5) {
   THREE.BufferGeometry.call(this);
 
@@ -49,7 +52,7 @@ function GeoJsonGeometry(geoJson, radius = 1, resolution = 5) {
 
   // build geometry
   indices.length && this.setIndex(indices);
-  vertices.length && this.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+  vertices.length && this[setAttributeFn]('position', new THREE.Float32BufferAttribute(vertices, 3));
 
   //
 
