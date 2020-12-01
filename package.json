@@ -38,6 +38,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
+    "d3-geo": "^2.0.1",
     "earcut": "^2.2.2"
   },
   "peerDependencies": {
