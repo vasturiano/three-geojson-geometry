@@ -1,15 +1,13 @@
 import {
   BufferGeometry,
-  Float32BufferAttribute,
-  Geometry
+  Float32BufferAttribute
 } from 'three';
 
 const THREE = window.THREE
   ? window.THREE // Prefer consumption from global THREE, if exists
   : {
   BufferGeometry,
-  Float32BufferAttribute,
-  Geometry
+  Float32BufferAttribute
 };
 
 import earcut from 'earcut';
