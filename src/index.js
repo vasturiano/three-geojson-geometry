@@ -2,154 +2,157 @@ import {
   BufferGeometry,
   Float32BufferAttribute
 } from 'three';
+
 import earcut from 'earcut';
+
 import interpolateLine from './interpolateLine';
 
 if(window !== 'undefined') {
-  const THREE = window.THREE
+const THREE = window.THREE
   ? window.THREE // Prefer consumption from global THREE, if exists
   : {
   BufferGeometry,
   Float32BufferAttribute
 };
 
-  // support both modes for backwards threejs compatibility
-  const setAttributeFn = new THREE.BufferGeometry().setAttribute ? 'setAttribute' : 'addAttribute';
 
-  class GeoJsonGeometry extends THREE.BufferGeometry {
-    constructor(geoJson, radius = 1, resolution = 5) {
-      super();
+// support both modes for backwards threejs compatibility
+const setAttributeFn = new THREE.BufferGeometry().setAttribute ? 'setAttribute' : 'addAttribute';
 
-      this.type = 'GeoJsonGeometry';
+class GeoJsonGeometry extends THREE.BufferGeometry {
+  constructor(geoJson, radius = 1, resolution = 5) {
+    super();
 
-      this.parameters = {
-        geoJson,
-        radius,
-        resolution
-      };
+    this.type = 'GeoJsonGeometry';
 
-      // process various geometry types
-      const groups = ({
-        Point: genPoint,
-        MultiPoint: genMultiPoint,
-        LineString: genLineString,
-        MultiLineString: genMultiLineString,
-        Polygon: genPolygon,
-        MultiPolygon: genMultiPolygon
-      }[geoJson.type] || (() => []))(geoJson.coordinates, radius);
+    this.parameters = {
+      geoJson,
+      radius,
+      resolution
+    };
 
-      // concat groups
-      let indices = [], vertices = [];
-      let groupCnt = 0;
-      groups.forEach(newG => {
-        const prevIndCnt = indices.length;
-        concatGroup({indices, vertices}, newG);
+    // process various geometry types
+    const groups = ({
+      Point: genPoint,
+      MultiPoint: genMultiPoint,
+      LineString: genLineString,
+      MultiLineString: genMultiLineString,
+      Polygon: genPolygon,
+      MultiPolygon: genMultiPolygon
+    }[geoJson.type] || (() => []))(geoJson.coordinates, radius);
 
-        this.addGroup(prevIndCnt, indices.length - prevIndCnt, groupCnt++);
+    // concat groups
+    let indices = [], vertices = [];
+    let groupCnt = 0;
+    groups.forEach(newG => {
+      const prevIndCnt = indices.length;
+      concatGroup({indices, vertices}, newG);
+
+      this.addGroup(prevIndCnt, indices.length - prevIndCnt, groupCnt++);
+    });
+
+    // build geometry
+    indices.length && this.setIndex(indices);
+    vertices.length && this[setAttributeFn]('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+    //
+
+    function genPoint(coords, r) {
+      const vertices = polar2Cartesian(coords[1], coords[0], r);
+      const indices = [];
+
+      return [{vertices, indices}];
+    }
+
+    function genMultiPoint(coords, r) {
+      const result = {vertices: [], indices: []};
+
+      coords.map(c => genPoint(c, r)).forEach(([newPnt]) => {
+        concatGroup(result, newPnt);
       });
 
-      // build geometry
-      indices.length && this.setIndex(indices);
-      vertices.length && this[setAttributeFn]('position', new THREE.Float32BufferAttribute(vertices, 3));
+      return [result];
+    }
 
-      //
+    function genLineString(coords, r) {
+      const coords3d = interpolateLine(coords, resolution)
+        .map(([lng, lat]) => polar2Cartesian(lat, lng, r));
 
-      function genPoint(coords, r) {
-        const vertices = polar2Cartesian(coords[1], coords[0], r);
-        const indices = [];
+      const {vertices} = earcut.flatten([coords3d]);
 
-        return [{vertices, indices}];
+      const numPoints = Math.round(vertices.length / 3);
+
+      const indices = [];
+
+      for (let vIdx = 1; vIdx < numPoints; vIdx++) {
+        indices.push(vIdx - 1, vIdx);
       }
 
-      function genMultiPoint(coords, r) {
-        const result = {vertices: [], indices: []};
+      return [{vertices, indices}];
+    }
 
-        coords.map(c => genPoint(c, r)).forEach(([newPnt]) => {
-          concatGroup(result, newPnt);
-        });
+    function genMultiLineString(coords, r) {
+      const result = {vertices: [], indices: []};
 
-        return [result];
-      }
+      coords.map(c => genLineString(c, r)).forEach(([newLine]) => {
+        concatGroup(result, newLine);
+      });
 
-      function genLineString(coords, r) {
-        const coords3d = interpolateLine(coords, resolution)
-          .map(([lng, lat]) => polar2Cartesian(lat, lng, r));
+      return [result];
+    }
 
-        const {vertices} = earcut.flatten([coords3d]);
+    function genPolygon(coords, r) {
+      const coords3d = coords
+        .map(coordsSegment => interpolateLine(coordsSegment, resolution)
+          .map(([lng, lat]) => polar2Cartesian(lat, lng, r)));
 
-        const numPoints = Math.round(vertices.length / 3);
+      // Each point generates 3 vertice items (x,y,z).
+      const {vertices, holes} = earcut.flatten(coords3d);
 
-        const indices = [];
+      const firstHoleIdx = holes[0] || Infinity;
+      const outerVertices = vertices.slice(0, firstHoleIdx);
+      const holeVertices = vertices.slice(firstHoleIdx);
 
-        for (let vIdx = 1; vIdx < numPoints; vIdx++) {
-          indices.push(vIdx - 1, vIdx);
-        }
+      const holesIdx = new Set(holes);
 
-        return [{vertices, indices}];
-      }
+      const numPoints = Math.round(vertices.length / 3);
 
-      function genMultiLineString(coords, r) {
-        const result = {vertices: [], indices: []};
-
-        coords.map(c => genLineString(c, r)).forEach(([newLine]) => {
-          concatGroup(result, newLine);
-        });
-
-        return [result];
-      }
-
-      function genPolygon(coords, r) {
-        const coords3d = coords
-          .map(coordsSegment => interpolateLine(coordsSegment, resolution)
-            .map(([lng, lat]) => polar2Cartesian(lat, lng, r)));
-
-        // Each point generates 3 vertice items (x,y,z).
-        const {vertices, holes} = earcut.flatten(coords3d);
-
-        const firstHoleIdx = holes[0] || Infinity;
-        const outerVertices = vertices.slice(0, firstHoleIdx);
-        const holeVertices = vertices.slice(firstHoleIdx);
-
-        const holesIdx = new Set(holes);
-
-        const numPoints = Math.round(vertices.length / 3);
-
-        const outerIndices = [], holeIndices = [];
-        for (let vIdx = 1; vIdx < numPoints; vIdx++) {
-          if (!holesIdx.has(vIdx)) {
-            if (vIdx < firstHoleIdx) {
-              outerIndices.push(vIdx - 1, vIdx)
-            } else {
-              holeIndices.push(vIdx - 1 - firstHoleIdx, vIdx - firstHoleIdx);
-            }
+      const outerIndices = [], holeIndices = [];
+      for (let vIdx = 1; vIdx < numPoints; vIdx++) {
+        if (!holesIdx.has(vIdx)) {
+          if (vIdx < firstHoleIdx) {
+            outerIndices.push(vIdx - 1, vIdx)
+          } else {
+            holeIndices.push(vIdx - 1 - firstHoleIdx, vIdx - firstHoleIdx);
           }
         }
-
-        const groups = [{indices: outerIndices, vertices: outerVertices}];
-
-        if (holes.length) {
-          groups.push({indices: holeIndices, vertices: holeVertices});
-        }
-
-        return groups;
       }
 
-      function genMultiPolygon(coords, r) {
-        const outer = {vertices: [], indices: []};
-        const holes = {vertices: [], indices: []};
+      const groups = [{indices: outerIndices, vertices: outerVertices}];
 
-        coords.map(c => genPolygon(c, r)).forEach(([newOuter, newHoles]) => {
-          concatGroup(outer, newOuter);
-          newHoles && concatGroup(holes, newHoles);
-        });
-
-        const groups = [outer];
-        holes.vertices.length && groups.push(holes);
-
-        return groups;
+      if (holes.length) {
+        groups.push({indices: holeIndices, vertices: holeVertices});
       }
+
+      return groups;
+    }
+
+    function genMultiPolygon(coords, r) {
+      const outer = {vertices: [], indices: []};
+      const holes = {vertices: [], indices: []};
+
+      coords.map(c => genPolygon(c, r)).forEach(([newOuter, newHoles]) => {
+        concatGroup(outer, newOuter);
+        newHoles && concatGroup(holes, newHoles);
+      });
+
+      const groups = [outer];
+      holes.vertices.length && groups.push(holes);
+
+      return groups;
     }
   }
+}
 }
 
 //
