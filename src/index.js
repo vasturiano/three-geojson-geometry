@@ -3,21 +3,17 @@ import {
   Float32BufferAttribute
 } from 'three';
 
-
-if(window !== 'undefined') {
-  const THREE = window.THREE
+const THREE = (typeof window !== 'undefined') && window.THREE
   ? window.THREE // Prefer consumption from global THREE, if exists
   : {
-    BufferGeometry,
-    Float32BufferAttribute
-  };
-}
+  BufferGeometry,
+  Float32BufferAttribute
+};
 
 import earcut from 'earcut';
 
 import interpolateLine from './interpolateLine';
 
-if(window !== 'undefined') {
 // support both modes for backwards threejs compatibility
 const setAttributeFn = new THREE.BufferGeometry().setAttribute ? 'setAttribute' : 'addAttribute';
 
@@ -154,7 +150,6 @@ class GeoJsonGeometry extends THREE.BufferGeometry {
       return groups;
     }
   }
-}
 }
 
 //
