@@ -108,8 +108,8 @@ class GeoJsonGeometry extends THREE.BufferGeometry {
       const {vertices, holes} = earcut.flatten(coords3d);
 
       const firstHoleIdx = holes[0] || Infinity;
-      const outerVertices = vertices.slice(0, firstHoleIdx);
-      const holeVertices = vertices.slice(firstHoleIdx);
+      const outerVertices = vertices.slice(0, firstHoleIdx * 3);
+      const holeVertices = vertices.slice(firstHoleIdx * 3);
 
       const holesIdx = new Set(holes);
 
