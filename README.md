@@ -3,7 +3,7 @@ ThreeJS GeoJSON Geometry
 
 [![NPM package][npm-img]][npm-url]
 [![Build Size][build-size-img]][build-size-url]
-[![Dependencies][dependencies-img]][dependencies-url]
+[![NPM Downloads][npm-downloads-img]][npm-downloads-url]
 
 A ThreeJS geometry class for stroking GeoJSON objects on a sphere. 
 
@@ -13,22 +13,22 @@ A ThreeJS geometry class for stroking GeoJSON objects on a sphere.
 
 ## Quick start
 
-```
+```js
 import { GeoJsonGeometry } from 'three-geojson-geometry';
 ```
 or
-```
+```js
 const { GeoJsonGeometry } = require('three-geojson-geometry');
 ```
 or even
-```
+```html
 <script src="//unpkg.com/three-geojson-geometry"></script>
 ```
 then
-```
+```js
 const myLine = new THREE.Line(
-    new THREE.GeoJsonGeometry(geoJson),
-    new THREE.LineBasicMaterial({ color: 'blue' })
+  new THREE.GeoJsonGeometry(geoJson),
+  new THREE.LineBasicMaterial({ color: 'blue' })
 );
 
 ```
@@ -64,9 +64,9 @@ Different geoJson types should be represented using different ThreeJS object typ
 * `MultiLineString` and `MultiPolygon` - Use `THREE.LineSegments`
 
 
-[npm-img]: https://img.shields.io/npm/v/three-geojson-geometry.svg
+[npm-img]: https://img.shields.io/npm/v/three-geojson-geometry
 [npm-url]: https://npmjs.org/package/three-geojson-geometry
-[build-size-img]: https://img.shields.io/bundlephobia/minzip/three-geojson-geometry.svg
+[build-size-img]: https://img.shields.io/bundlephobia/minzip/three-geojson-geometry
 [build-size-url]: https://bundlephobia.com/result?p=three-geojson-geometry
-[dependencies-img]: https://img.shields.io/david/vasturiano/three-geojson-geometry.svg
-[dependencies-url]: https://david-dm.org/vasturiano/three-geojson-geometry
+[npm-downloads-img]: https://img.shields.io/npm/dt/three-geojson-geometry
+[npm-downloads-url]: https://www.npmtrends.com/three-geojson-geometry
