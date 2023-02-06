@@ -2,10 +2,15 @@
   "name": "three-geojson-geometry",
   "version": "1.1.8",
   "description": "ThreeJS geometry for stroking GeoJSON objects on a sphere",
+  "type": "module",
   "unpkg": "dist/three-geojson-geometry.min.js",
-  "main": "dist/three-geojson-geometry.common.js",
-  "module": "dist/three-geojson-geometry.module.js",
+  "main": "dist/three-geojson-geometry.mjs",
+  "module": "dist/three-geojson-geometry.mjs",
   "types": "dist/three-geojson-geometry.d.ts",
+  "exports": {
+    "umd": "./dist/three-geojson-geometry.min.js",
+    "default": "./dist/three-geojson-geometry.mjs"
+  },
   "homepage": "https://github.com/vasturiano/three-geojson-geometry",
   "repository": {
     "type": "git",
@@ -45,18 +50,19 @@
     "three": ">=0.72.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.1",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-proposal-object-rest-spread": "^7.18.9",
-    "@babel/preset-env": "^7.19.1",
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-commonjs": "^22.0.2",
-    "@rollup/plugin-node-resolve": "^14.1.0",
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
     "@types/three": ">=0.72.0",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.79.1",
-    "rollup-plugin-dts": "^4.2.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^4.8.3"
+    "rimraf": "^4.1.2",
+    "rollup": "^3.14.0",
+    "rollup-plugin-dts": "^5.1.1",
+    "typescript": "^4.9.5"
+  },
+  "engines": {
+    "node": ">=12"
   }
 }

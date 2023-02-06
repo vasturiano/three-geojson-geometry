@@ -16,11 +16,7 @@ A ThreeJS geometry class for stroking GeoJSON objects on a sphere.
 ```js
 import { GeoJsonGeometry } from 'three-geojson-geometry';
 ```
-or
-```js
-const { GeoJsonGeometry } = require('three-geojson-geometry');
-```
-or even
+or using a *script* tag
 ```html
 <script src="//unpkg.com/three-geojson-geometry"></script>
 ```
