@@ -15,7 +15,7 @@
   const material = new THREE.LineBasicMaterial({ color: 'blue' });
 
   // random points
-  const N = 4e4;
+  const N = 1e6;
   const multiPoints = {
     type: 'MultiPoint',
     coordinates: [...Array(N).keys()].map(() => [(Math.random() - 0.5) * 360, (Math.random() - 0.5) * 180])
