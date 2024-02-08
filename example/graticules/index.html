@@ -1,18 +1,27 @@
 <head>
   <style> body { margin: 0; } </style>
 
+  <script type="importmap">{ "imports": {
+    "three": "//unpkg.com/three/build/three.module.js",
+    "three/addons/": "//unpkg.com/three/examples/jsm/"
+  }}</script>
+  <script type="module">
+    import * as THREE from 'three';
+    window.THREE = { ...THREE };
+  </script>
+
   <script src="//unpkg.com/d3"></script>
 
-  <script src="//unpkg.com/three"></script>
-  <script src="//unpkg.com/three-trackballcontrols-web/dist/three-trackballcontrols.min.js"></script>
-  <script src="//unpkg.com/three-geojson-geometry"></script>
-  <!--<script src="../../dist/three-geojson-geometry.js"></script>-->
+  <script src="//unpkg.com/three-geojson-geometry" defer></script>
+  <!--<script src="../../dist/three-geojson-geometry.js" defer></script>-->
 </head>
 
 <body>
 <div id="viz"></div>
 
-<script>
+<script type="module">
+  import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+
   const alt = 50;
   const material = new THREE.LineBasicMaterial({ color: 'blue' });
 
