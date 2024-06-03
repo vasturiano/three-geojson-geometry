@@ -23,7 +23,7 @@ or using a *script* tag
 then
 ```js
 const myLine = new THREE.Line(
-  new THREE.GeoJsonGeometry(geoJson),
+  new GeoJsonGeometry(geoJson),
   new THREE.LineBasicMaterial({ color: 'blue' })
 );
 
