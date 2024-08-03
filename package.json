@@ -8,6 +8,7 @@
   "module": "dist/three-geojson-geometry.mjs",
   "types": "dist/three-geojson-geometry.d.ts",
   "exports": {
+    "types": "./dist/three-geojson-geometry.d.ts",
     "umd": "./dist/three-geojson-geometry.min.js",
     "default": "./dist/three-geojson-geometry.mjs"
   },
