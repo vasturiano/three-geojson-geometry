@@ -10,7 +10,7 @@ const THREE = (typeof window !== 'undefined') && window.THREE
   Float32BufferAttribute
 };
 
-import earcut from 'earcut';
+import { flatten as earcutFlatten } from 'earcut';
 
 import interpolateLine from './interpolateLine';
 
@@ -76,7 +76,7 @@ class GeoJsonGeometry extends THREE.BufferGeometry {
       const coords3d = interpolateLine(coords, resolution)
         .map(([lng, lat]) => polar2Cartesian(lat, lng, r));
 
-      const {vertices} = earcut.flatten([coords3d]);
+      const {vertices} = earcutFlatten([coords3d]);
 
       const numPoints = Math.round(vertices.length / 3);
 
@@ -105,7 +105,7 @@ class GeoJsonGeometry extends THREE.BufferGeometry {
           .map(([lng, lat]) => polar2Cartesian(lat, lng, r)));
 
       // Each point generates 3 vertice items (x,y,z).
-      const {vertices, holes} = earcut.flatten(coords3d);
+      const {vertices, holes} = earcutFlatten(coords3d);
 
       const firstHoleIdx = holes[0] || Infinity;
       const outerVertices = vertices.slice(0, firstHoleIdx * 3);
