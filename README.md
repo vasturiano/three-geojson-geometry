@@ -14,7 +14,7 @@ A ThreeJS geometry class for stroking GeoJSON objects on a sphere.
 ## Quick start
 
 ```js
-import { GeoJsonGeometry } from 'three-geojson-geometry';
+import GeoJsonGeometry from 'three-geojson-geometry';
 ```
 or using a *script* tag
 ```html

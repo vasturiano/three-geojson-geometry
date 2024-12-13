@@ -9,8 +9,7 @@ const { name, homepage, version, dependencies, peerDependencies } = pkg;
 
 const umdConf = {
   format: 'umd',
-  extend: true,
-  name: 'THREE',
+  name: 'GeoJsonGeometry',
   globals: { three: 'THREE' },
   banner: `// Version ${version} ${name} - ${homepage}`
 };

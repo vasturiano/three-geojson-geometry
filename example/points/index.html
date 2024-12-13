@@ -2,23 +2,21 @@
   <style> body { margin: 0; } </style>
 
   <script type="importmap">{ "imports": {
-    "three": "//unpkg.com/three/build/three.module.js",
-    "three/addons/": "//unpkg.com/three/examples/jsm/"
+    "three": "https://esm.sh/three",
+    "three/addons/": "https://esm.sh/three/examples/jsm/"
   }}</script>
-  <script type="module">
-    import * as THREE from 'three';
-    window.THREE = { ...THREE };
-  </script>
 
-  <script src="//unpkg.com/three-geojson-geometry" defer></script>
-  <!--<script src="../../dist/three-geojson-geometry.js" defer></script>-->
+<!--  <script type="module">import * as THREE from 'three'; window.THREE = THREE;</script>-->
+<!--  <script src="../../dist/three-geojson-geometry.js" defer></script>-->
 </head>
 
 <body>
 <div id="viz"></div>
 
 <script type="module">
-  import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+  import GeoJsonGeometry from 'https://esm.sh/three-geojson-geometry?external=three';
+  import * as THREE from 'three';
+  import { TrackballControls } from 'three/addons/controls/TrackballControls.js?external=three';
 
   const alt = 50;
   const material = new THREE.LineBasicMaterial({ color: 'blue' });
@@ -31,7 +29,7 @@
   };
 
   const pointsObj = new THREE.Points(
-    new THREE.GeoJsonGeometry(multiPoints, alt),
+    new GeoJsonGeometry(multiPoints, alt),
     material
   );
 

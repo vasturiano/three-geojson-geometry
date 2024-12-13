@@ -174,4 +174,4 @@ function polar2Cartesian(lat, lng, r = 0) {
   ];
 }
 
-export { GeoJsonGeometry };
+export default GeoJsonGeometry;

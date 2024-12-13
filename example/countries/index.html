@@ -2,25 +2,22 @@
   <style> body { margin: 0; } </style>
 
   <script type="importmap">{ "imports": {
-    "three": "//unpkg.com/three/build/three.module.js",
-    "three/addons/": "//unpkg.com/three/examples/jsm/"
+    "three": "https://esm.sh/three",
+    "three/addons/": "https://esm.sh/three/examples/jsm/"
   }}</script>
-  <script type="module">
-    import * as THREE from 'three';
-    window.THREE = { ...THREE };
-  </script>
 
-  <script src="//unpkg.com/d3"></script>
-
-  <script src="//unpkg.com/three-geojson-geometry" defer></script>
-  <!--<script src="../../dist/three-geojson-geometry.js" defer></script>-->
+<!--  <script type="module">import * as THREE from 'three'; window.THREE = THREE;</script>-->
+<!--  <script src="../../dist/three-geojson-geometry.js" defer></script>-->
 </head>
 
 <body>
 <div id="viz"></div>
 
 <script type="module">
-  import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+  import GeoJsonGeometry from 'https://esm.sh/three-geojson-geometry?external=three';
+  import * as THREE from 'three';
+  import { TrackballControls } from 'three/addons/controls/TrackballControls.js?external=three';
+  import { geoGraticule10 } from 'https://esm.sh/d3-geo';
 
   fetch('../geojson/ne_110m_admin_0_countries.geojson').then(res => res.json()).then(countries =>
   {
@@ -28,7 +25,7 @@
 
     const lineObjs = [
       new THREE.LineSegments(
-        new THREE.GeoJsonGeometry(d3.geoGraticule10(), alt),
+        new GeoJsonGeometry(geoGraticule10(), alt),
         new THREE.LineBasicMaterial({ color: 'white', opacity: 0.04, transparent: true })
       )
     ];
@@ -40,7 +37,7 @@
 
     countries.features.forEach(({ properties, geometry }) => {
       lineObjs.push(new THREE.LineSegments(
-        new THREE.GeoJsonGeometry(geometry, alt),
+        new GeoJsonGeometry(geometry, alt),
         materials
       ))
     });
