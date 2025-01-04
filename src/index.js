@@ -56,7 +56,7 @@ class GeoJsonGeometry extends THREE.BufferGeometry {
     //
 
     function genPoint(coords, r) {
-      const vertices = polar2Cartesian(coords[1], coords[0], r);
+      const vertices = polar2Cartesian(coords[1], coords[0], r + (coords[2] || 0));
       const indices = [];
 
       return [{vertices, indices}];
@@ -74,9 +74,9 @@ class GeoJsonGeometry extends THREE.BufferGeometry {
 
     function genLineString(coords, r) {
       const coords3d = interpolateLine(coords, resolution)
-        .map(([lng, lat]) => polar2Cartesian(lat, lng, r));
+        .map(([lng, lat, alt = 0]) => polar2Cartesian(lat, lng, r + alt));
 
-      const {vertices} = earcutFlatten([coords3d]);
+      const { vertices} = earcutFlatten([coords3d]);
 
       const numPoints = Math.round(vertices.length / 3);
 
@@ -102,7 +102,7 @@ class GeoJsonGeometry extends THREE.BufferGeometry {
     function genPolygon(coords, r) {
       const coords3d = coords
         .map(coordsSegment => interpolateLine(coordsSegment, resolution)
-          .map(([lng, lat]) => polar2Cartesian(lat, lng, r)));
+          .map(([lng, lat, alt = 0]) => polar2Cartesian(lat, lng, r + alt)));
 
       // Each point generates 3 vertice items (x,y,z).
       const {vertices, holes} = earcutFlatten(coords3d);
