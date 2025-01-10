@@ -7,7 +7,7 @@ interface GeoJson {
   coordinates: Coords;
 }
 
-export declare class GeoJsonGeometry extends BufferGeometry {
+declare class GeoJsonGeometry extends BufferGeometry {
   constructor(
     geoJson: GeoJson,
     radius?: number,
@@ -20,3 +20,5 @@ export declare class GeoJsonGeometry extends BufferGeometry {
     resolution?: number
   }
 }
+
+export default GeoJsonGeometry;
