@@ -150,6 +150,14 @@ class GeoJsonGeometry extends THREE.BufferGeometry {
       return groups;
     }
   }
+
+  clone() {
+    return new this.constructor(
+      this.parameters.geoJson,
+      this.parameters.radius,
+      this.parameters.resolution
+    ).copy(this);
+  }
 }
 
 //
