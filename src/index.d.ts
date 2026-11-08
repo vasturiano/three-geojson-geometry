@@ -1,11 +1,14 @@
 import { BufferGeometry } from 'three';
 
-type Coords = number[] | Coords[];
+type Position = number[];
 
-interface GeoJson {
-  type: 'Point' | 'MultiPoint' | 'LineString' | 'MultiLineString' | 'Polygon' | 'MultiPolygon';
-  coordinates: Coords;
-}
+export type GeoJson =
+  | { type: 'Point'; coordinates: Position }
+  | { type: 'MultiPoint'; coordinates: Position[] }
+  | { type: 'LineString'; coordinates: Position[] }
+  | { type: 'MultiLineString'; coordinates: Position[][] }
+  | { type: 'Polygon'; coordinates: Position[][] }
+  | { type: 'MultiPolygon'; coordinates: Position[][][] };
 
 declare class GeoJsonGeometry extends BufferGeometry {
   constructor(
@@ -15,10 +18,10 @@ declare class GeoJsonGeometry extends BufferGeometry {
   );
 
   parameters: {
-    geoJson: GeoJson,
-    radius?: number,
-    resolution?: number
-  }
+    geoJson: GeoJson;
+    radius: number;
+    resolution: number;
+  };
 }
 
 export default GeoJsonGeometry;
